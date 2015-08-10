@@ -18,7 +18,9 @@ class Item(base):
     id = Column(id, primary_key=True)
     name = Column(String, nullable=False)
     description = Column(String)
-    time = Column(datetime,default=datetime.utcnow)
+    time = Column(datetime, default=datetime.utcnow)
+
+    Base.metadata.create_all(engine)
 
 
 
