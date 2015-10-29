@@ -35,8 +35,30 @@ class Bid(base):
     bid_id = Column(Integer, primary_key=True)
     price = Column(Float, nullable=False)
 
-
+base.metadata.drop_all(engine)
 base.metadata.create_all(engine)
+
+bidder1 = User(username="ryan", password="this is the password")
+session.add(bidder1)
+session.commit()
+
+bidder2 = User(username="jeff", password="correct battery horse staple")
+session.add(bidder2)
+session.commit()
+
+baseball = Item(name="Baseball for sale")
+session.add(baseball)
+session.commit()
+
+bat = Item(name="you need a bat")
+session.add(bat)
+session.commit()
+
+print(session.query(User).all())
+
+print([user.username for user in session.query(User)])
+
+
 
 
 
