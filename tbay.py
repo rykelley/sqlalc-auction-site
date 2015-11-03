@@ -20,23 +20,28 @@ class Item(base):
     name = Column(String, nullable=False)
     description = Column(String)
     time = Column(DateTime, default=datetime.utcnow)
-    bid = relationship('Bid', backref='bid')
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    bids = relationship('Bid', backref='Item')
 
 
 class User(base):
     __tablename__ = "users"
 
-    user_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False)
     password = Column(String, nullable=False)
-    auction_item = relationship('item', backref='')
+    auction_item = relationship('Item', backref='user')
+    bid = relationship('Bid', backref='bidder')
 
 
 class Bid(base):
     __tablename__ = "Bids"
 
-    bid_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     price = Column(Float, nullable=False)
+    bidder_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    item_id = Column(Integer, ForeignKey('items.id'), nullable=False)
+
 
 base.metadata.drop_all(engine)
 base.metadata.create_all(engine)
@@ -49,17 +54,26 @@ bidder2 = User(username="jeff", password="correct battery horse staple")
 session.add(bidder2)
 session.commit()
 
-baseball = Item(name="Baseball for sale")
+bidder3 = User(username="joe", password="correct battery horse cows")
+session.add(bidder3)
+session.commit()
+
+baseball = Item(name="Baseball for sale", user=bidder1)
 session.add(baseball)
 session.commit()
 
-bat = Item(name="you need a bat")
+bat = Item(name="you need a bat", user=bidder1)
 session.add(bat)
 session.commit()
+
+bid01 = Bid(price="5.00", bidder=bidder1, Item=baseball)
+
 
 print(session.query(User).all())
 
 print([user.username for user in session.query(User)])
+print([item.name for item in session.query(Item)])
+
 
 
 
