@@ -67,7 +67,10 @@ session.add(bat)
 session.commit()
 
 bid01 = Bid(price="5.00", bidder=bidder1, Item=baseball)
-
+bid02 = Bid(price="7.00", bidder=bidder2, Item=baseball)
+bid03 = Bid(price="6.00", bidder=bidder3, Item=baseball)
+session.add_all([bid01, bid02, bid03])
+session.commit()
 
 print(session.query(User).all())
 
