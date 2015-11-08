@@ -72,6 +72,19 @@ bid03 = Bid(price="6.00", bidder=bidder3, Item=baseball)
 session.add_all([bid01, bid02, bid03])
 session.commit()
 
+
+def get_high_bid(item_id):
+    item = session.query(Item.name).filter(Item.id == item_id).first()
+    high_bidder = session.query(Bid.bidder_id, Bid.price).\
+        filter(Bid.item_id == item_id).\
+        order_by(Bid.price.desc()).first()
+    msg = "The winner of the '{0}' auction is {0} with a bid of {2}.".format(
+        item[0], high_bidder[0], high_bidder[1])
+    return msg
+
+
+print(get_high_bid(2))
+
 print(session.query(User).all())
 
 print([user.username for user in session.query(User)])
